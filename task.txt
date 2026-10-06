@@ -81,4 +81,23 @@ TRUNCATE TABLE employees;
 3.The table no longer exists
 4.cannot rollback the data
 
+9. not null means the column must contain a value when inserying a rows
+```
+CREATE TABLE employees (
+    id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    department VARCHAR(50) NOT NULL
+);
+```
+10. unique query represent a column must contains unique values
+```
+CREATE TABLE employees (
+    id INT PRIMARY KEY,
+    email VARCHAR(100) UNIQUE,
+    name VARCHAR(100)
+);
+```
+here email must be unique across all the rows
+
+
 
