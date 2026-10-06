@@ -99,5 +99,19 @@ CREATE TABLE employees (
 ```
 here email must be unique across all the rows
 
+12.
+```
+CREATE TABLE employees (
+    id INT PRIMARY KEY,
+    name VARCHAR(100),
+    salary DECIMAL(10,2),
+    CHECK (salary > 0)
+);
+```
 
+16.
+```
+INSERT INTO employees (employee_id, name, department_id, salary)
+VALUES (1, 'mansi', 10, 50000);
+```
 
