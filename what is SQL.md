@@ -141,6 +141,37 @@ cretae table tbl_employee(
 | `JSON` | Structured data | `{"name":"Mansi"}` | Stores JSON object |
 | `BLOB` | Binary data | image/file data | Stores raw binary |
 
+# what is datatypes and size of column name is tables 
+
+| Column / Field | Data Type | Description |
+|---|---|---|
+| name | CHAR(0–255) | Stores fixed-length character/string data. Intended for characters/text only. |
+| name | VARCHAR(0–255) | Stores variable-length character/string data. Can contain letters, numbers, spaces, and special characters. |
+| id | INT | Stores whole numbers, commonly used for IDs and numeric values. |
+| bigint_id | BIGINT | Stores very large whole numbers, commonly used for large IDs. |
+| age | TINYINT | Stores small whole numbers, commonly used for values such as age. |
+| amount | DECIMAL(p,s) | Stores exact decimal numbers, commonly used for money and financial values. |
+| price | FLOAT | Stores approximate decimal/floating-point numbers. |
+| percentage | DOUBLE | Stores approximate decimal numbers with higher precision than FLOAT. |
+| is_active | BOOLEAN | Stores a true/false value. |
+| status | ENUM | Stores one value from a predefined list of allowed values. |
+| description | TEXT | Stores variable-length text without a small VARCHAR-style limit. |
+| long_description | LONGTEXT | Stores very large amounts of text. |
+| code | CHAR(n) | Stores fixed-length text. Useful for values with a known, consistent length, such as country codes. |
+| email | VARCHAR(255) | Stores email addresses as variable-length text. |
+| phone | VARCHAR(20) | Stores phone numbers. VARCHAR is preferred because phone numbers may contain `+`, spaces, `-`, etc. |
+| url | VARCHAR(2048) | Stores website or URL strings. |
+| date_of_birth | DATE | Stores a calendar date in `YYYY-MM-DD` format. |
+| created_at | DATETIME | Stores date and time without timezone conversion. |
+| updated_at | TIMESTAMP | Stores a date and time, commonly used for record creation/update timestamps. |
+| time | TIME | Stores a time value such as `14:30:00`. |
+| year | YEAR | Stores a year value. |
+| json_data | JSON | Stores structured JSON data. |
+| binary_data | BLOB | Stores binary data such as files or raw bytes. |
+| uuid | CHAR(36) | Stores a UUID string such as `550e8400-e29b-41d4-a716-446655440000`. |
+
+
+
 ## Quick Summary
 
 - `INT`, `BIGINT`, `SMALLINT` = numbers
@@ -148,6 +179,9 @@ cretae table tbl_employee(
 - `DATE`, `TIME`, `DATETIME`, `TIMESTAMP` = date/time
 - `DECIMAL`, `FLOAT`, `DOUBLE` = decimal numbers
 - `BOOLEAN`, `ENUM`, `JSON`, `BLOB` = special types
+
+
+
 
 ```sql
 CREATE TABLE student (
@@ -678,17 +712,445 @@ commit;
 ```
 **rollback**
 
+1. rollback used to rollback data after delete 
+2. rollback is used in TCL 
+
+**query of rollback**
+
+```
+start TRANSACTION;
+delete from country where cid=8;
+select * from country where cid=8;
+rollback;
+select * from country where cid=8;
+```
+
+# key constraints in SQL : 
+
+1. key constraints provides limitations on tables 
+2. key constraints provides pk | uk | fk on tables 
+
+# types of key constraints  in SQL 
+
+# primary key : 
+
+ 1. pk is provides one times in a tables 
+ 2. pk never stored null values 
+ 3. pk should always auto_increments 
+
+ **create table**
+
+ ```
+  create table department(
+
+   depid int auto_increment primary key,
+   depname varchar(200),
+   created_at timestamp
+  )
+
+
+ ```
+
+![alt text](image-5.png)
+
+
+# unique key : 
+
+ 1. uk is provides more than one times in a tables on column 
+ 2. uk at least stored one times a null values 
+ 3. uk never stored dublicate data 
+
+ **create table**
+
+ ```
+  
+  create table students(
+
+   stid int auto_increment primary key,
+   name varchar(200),
+   email varchar(200),
+   mobile bigint,
+   gender varchar(200),
+   hobbies varchar(200),   
+   address text,
+   created_at timestamp
+  )
+
+ ```
+# how to create unique key on tables 
+
+```
+alter table students add UNIQUE KEY(`email`)
+or
+alter table students add UNIQUE KEY(`email`, `mobile`)
+
+```
+
+
+![alt text](image-6.png)
+
+
+
+# foreign key : 
+
+ 1. fk is provides more than one times in a tables on column 
+ 2. fk stored a duplicate data  
+ 3. fk used to provides relationship b/w one table to another tables with common field or columns in tables  
+
+ **create table**
+
+```
+create table country(
+
+    cid int AUTO_INCREMENT PRIMARY key, 
+    cname varchar(255),
+    created_at timestamp
+    
+)
+
+or
+
+create table state(
+
+    sid int AUTO_INCREMENT PRIMARY key, 
+    sname varchar(255),
+    created_at timestamp
+    
+)
+
+or
+
+create table city(
+
+    ctid int AUTO_INCREMENT PRIMARY key, 
+    ctname varchar(255),
+    created_at timestamp
+    
+)
+
+or
+
+create table users(
+
+    uid int AUTO_INCREMENT PRIMARY key, 
+    name varchar(255),
+    email varchar(255),
+    mobile bigint,
+    gender varchar(255),
+    hobby varchar(255),
+    cid int,
+    CONSTRAINT FOREIGN key(cid) REFERENCES country(cid),
+    
+    sid int,
+    CONSTRAINT FOREIGN key(sid) REFERENCES state(sid),
+    
+    ctid int,
+    CONSTRAINT FOREIGN key(ctid) REFERENCES city(ctid),
+    address text,
+    created_at timestamp
+    
+)
+
+```
+
+# SQL Normalization  ?
+
+1. SQL normalization is used to removed duplicate or redundancies formate of data in tables 
+2. SQL normalization is used to divide tables using pk | uk | fk to remove duplicacy data formate in tables 
+3. There are some types of normalization 
+
+# types of nomalization 
+
+1. 1 NF (normalization form) 
+2. 2 NF (normalization form)
+3. 3 NF (normalization form)
+4. 4 NF (normalization form)
+5. 5 NF (normalization form)
+
+# 1 NF normalization form 
+
+- simple create tables and provides primary key without relationship 
+- this is called 1 NF 
+- create a table of college 
+
+
+```
+create table tbl_college(
+collegeid int primary key AUTO_INCREMENT,
+collegename varchar(255)
+)
+
+or
+
+create table tbl_department(
+depid int primary key AUTO_INCREMENT,
+depename varchar(255)
+)
+
+```
+
+# 2 NF (normalization form)
+1. create a table and add some table of columns as pk and uk 
+2. create table and add some uk to not accept duplicate data 
+
+```  
+create table tbl_faculty(
+fid int primary key AUTO_INCREMENT,
+name varchar(255),
+email varchar(255),
+age int,
+address text,
+mobile bigint    
+)
+
+```
+# 3 NF (normalization form)
+
+1. 3 NF start to provides relationship b/w tables 
+2. 3 NF provides FK for common field to give relationship b/w tables 
+
+```
+create table tbl_students(
+stid int primary key AUTO_INCREMENT,
+studentname varchar(255),
+stdemail varchar(255),
+stdage int,
+stdaddress text,
+stdmobile bigint,    
+depid int,
+CONSTRAINT FOREIGN key(depid)  REFERENCES tbl_department(depid),
+fid int,
+CONSTRAINT FOREIGN key(fid)  REFERENCES tbl_faculty(fid),
+
+collegeid int,
+CONSTRAINT FOREIGN key(collegeid)  REFERENCES tbl_college(collegeid)
+    
+);
+
+```
 
 
 
 
 
+# SQL join :  
 
-
-
-
-
-
-
-
+1. SQL join are used to join more than one tables with common field
+ 2. SQL join is used to join with match field one table to another table join that data
  
+ 3. SQL join  are some types
+  # types of join
+   1. join 
+   2. inner join
+    3. outer join   
+    - left join   
+    - right join   
+    - full join (not supported in mySql)
+    4. union join
+    5. cross join 
+    6. self join 
+    #  join :
+     1. SQL join are used to join more than one tables with common field 
+     2. SQL join is used to join with match field one table to another table join that data 3. join are used by **join** keyword 
+     **syntax of join**
+    
+    **syntax of join**
+```
+
+select table1.*, columnname from table1 join table2 on table1.commoncolumndname = table2.commoncolumnname
+
+or
+select users.*, cname from users join country on users.cid=country.cid;
+
+or
+
+select users.*, cname , sname, ctname  from users join country on users.cid=country.cid join state on users.sid=state.sid join city on users.ctid=city.ctid;
+
+
+```
+
+# inner join : 
+ 
+1. SQL inner join are used to join more than one tables with common field 
+2. SQL inner join is used to join with match field one table to another table join that data and return all data of first table and also join matched data
+
+3. inner join are used by **inner join** keyword 
+
+**syntax of inner join**
+
+```
+select table1.*, columnname from table1 inner join table2 on table1.commoncolumndname = table2.commoncolumnname
+or
+select users.*, cname from users inner join country on users.cid=country.cid;
+or
+select users.*, cname , sname, ctname  from users inner join country on users.cid=country.cid inner join state on users.sid=state.sid inner join city on users.ctid=city.ctid;
+or
+select uid, name, email, mobile, cname , sname, ctname  from users inner join country on users.cid=country.cid inner join state on users.sid=state.sid inner join city on users.ctid=city.ctid;
+
+or
+
+select orders.*, first_name, product_name from orders inner join customers on orders.customer_id=customers.customer_id inner join products on orders.product_id=products.product_id;
+
+or
+
+select orders.*, first_name, email, product_name from orders inner join customers on orders.customer_id=customers.customer_id inner join products on orders.product_id=products.product_id;
+
+```
+
+# outer join :
+
+1. left join 
+2. right join 
+3. full join 
+
+# left join : 
+
+1. SQL left join are used to join more than one tables with common field 
+2. SQL left join is used to join with match field of first table of left rows and return all data of first table and matched with second table of left rows if data matched return all data otherwise return null values there we used left join 
+
+3. left join are used by **left join** keyword 
+
+**syntax**
+
+```
+select table1.*, columnname from table1 left join table2 on table1.commoncolumndname = table2.commoncolumnname
+
+or
+select users.*, cname from users left join country on users.cid=country.cid;
+or
+select users.*, cname , sname, ctname  from users left join country on users.cid=country.cid left join state on users.sid=state.sid left join city on users.ctid=city.ctid;
+or
+select uid, name, email, mobile, cname , sname, ctname  from users left join country on users.cid=country.cid left join state on users.sid=state.sid left join city on users.ctid=city.ctid;
+
+or
+
+select orders.*, first_name, product_name from orders ileft join customers on orders.customer_id=customers.customer_id left join products on orders.product_id=products.product_id;
+
+or
+
+select orders.*, first_name, email, product_name from orders left join customers on orders.customer_id=customers.customer_id left join products on orders.product_id=products.product_id;
+
+```
+
+
+# right join : 
+
+1. SQL right join are used to join more than one tables with common field 
+2. SQL right join is used to join with match field of second table of right rows and return all data of second table and matched with first table of right rows if data matched return all data otherwise return **null** values there we used right join 
+
+3. right join are used by **right join** keyword 
+
+**syntax**
+
+```
+select table1.*, columnname from table1 right join table2 on table1.commoncolumndname = table2.commoncolumnname
+
+or
+select users.*, cname from users right join country on users.cid=country.cid;
+or
+select users.*, cname , sname, ctname  from users right join country on users.cid=country.cid right join state on users.sid=state.sid right join city on users.ctid=city.ctid;
+
+or
+
+select uid, name, email, mobile, cname , sname, ctname  from users right join country on users.cid=country.cid right join state on users.sid=state.sid right join city on users.ctid=city.ctid;
+
+or
+
+select orders.*, first_name, product_name from orders right join customers on orders.customer_id=customers.customer_id right join products on orders.product_id=products.product_id;
+
+or
+
+select orders.*, first_name, email, product_name from orders right join customers on orders.customer_id=customers.customer_id right join products on orders.product_id=products.product_id;
+
+```
+
+# full join : not supported inside of mysql 
+# full join =left join + right join 
+# note : we used union  join instead of full join  
+
+# unioun join : 
+
+# examples :
+
+```
+select users.*, cname from users left join country on users.cid=country.cid
+union
+select users.*, cname from users right join country on users.cid=country.cid 
+ 
+```
+
+# cross join : 
+
+1. cross join are used to join more than one table and its cross of return data from one table to another table
+2. its return a multiplication of each rows to another table data
+3. its return a dublicate data either match or not 
+
+# examples 
+```
+select * from users cross join country;
+```
+
+# its used in chain marketing 
+
+```
+     A
+ B    C     D
+EFG  HIJ   KLM   
+
+```
+
+# w.a.q to find second highest slalry from employee using subquery 
+1. subquery are used to query within another query 
+2. subquery are used to find above answer 
+3. fond highest salary
+# examples
+```
+select max(salary) as second_highest_salary from employee where salary<(select max(salary) from employee)
+or 
+select max(salary) as highest_salary from employee
+
+```
+# w.a.q to find second highest salary from employee using limit 
+# examples 
+```
+select salary as second_highest_salary from employee ORDER by salary desc limit 1,1;
+or
+select salary as max_highest_salary from employee ORDER by salary desc limit 0,1;
+or
+select salary as third_highest_salary from employee ORDER by salary desc limit 2,1;
+
+```
+# w.a.q to find a sum of salary on department wise 
+```
+select sum(salary), department as sumof_salary_department from employee group by department;
+```
+
+# w.a.q to alis of any column name 
+```
+select name as employee_name from employee 
+```
+# w.a.q to find systems default date and time via sql query 
+```
+select now()
+or
+select CURRENT_DATE()
+or
+select CURRENT_TIME()
+```
+# w.a.q to search any name in tables start with 's' or 'a' or 'b'
+
+```
+select * from employee where name like 's%';
+or
+select * from employee where name like 'a%';
+or
+select * from employee where name like 'b%';
+or
+select * from employee where name like '%s';
+or
+select * from employee where name like '%a%';
+```
+
+# self join : 
+
+
